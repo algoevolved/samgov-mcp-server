@@ -1,13 +1,33 @@
+# Core MCP
 mcp>=1.0.0
+
+# HTTP transport (SSE server)
 starlette>=0.37.0
 uvicorn>=0.29.0
+
+# HTTP client
 httpx>=0.27.0
+
+# Config
 pydantic>=2.0.0
 pydantic-settings>=2.0.0
 python-dotenv>=1.0.0
+
+# Resilience
 tenacity>=8.0.0
+
+# Logging
 structlog>=24.0.0
+
+# Billing
 stripe>=8.0.0
+
+# Email delivery
+resend>=2.0.0
+
+# Rate limiting (in-memory for single-instance; swap for Redis in multi-instance)
 limits>=3.0.0
+
+# Dev / testing
 pytest>=8.0.0
 pytest-asyncio>=0.23.0
