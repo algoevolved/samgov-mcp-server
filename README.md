@@ -1,6 +1,10 @@
 # SAM.gov MCP Server
 
-Federal contracting intelligence for AI assistants. Connects Claude (and any MCP-compatible AI) to SAM.gov, USASpending.gov, and SBIR.gov.
+**Federal contracting intelligence for AI assistants.**
+
+🌐 **[Live site → algoevolved.github.io/samgov-mcp-server](https://algoevolved.github.io/samgov-mcp-server/)**
+
+Connects Claude (and any MCP-compatible AI) to SAM.gov, USASpending.gov, and SBIR.gov. Search $700B+ in annual federal contracts, find expiring recompetes, and profile your competition — all in plain English.
 
 ## Tools
 
@@ -35,13 +39,16 @@ Add to `claude_desktop_config.json`:
 {
   "mcpServers": {
     "samgov": {
-      "url": "https://your-railway-url.railway.app/sse"
+      "url": "https://samgov-mcp-server-production.up.railway.app/sse",
+      "headers": {
+        "x-api-key": "YOUR_API_KEY_HERE"
+      }
     }
   }
 }
 ```
 
-## Pricing Tiers
+## Pricing
 
 | Tier | Price | Daily Requests |
 |------|-------|----------------|
@@ -49,7 +56,7 @@ Add to `claude_desktop_config.json`:
 | Team | $199/mo | 2,000 |
 | Enterprise | $499/mo | 10,000 |
 
-7-day free trial on all plans.
+7-day free trial on all plans. → [Get started](https://algoevolved.github.io/samgov-mcp-server/#pricing)
 
 ## License
 
