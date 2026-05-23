@@ -28,5 +28,5 @@ async def run(days_out=180, agency_name=None, keywords=None, min_amount=None, li
         try: days_left = (datetime.date.fromisoformat(end[:10]) - today).days
         except: pass
         lines.append(f"{i}. {a.get('Recipient Name','?')} | ⏰ {end} ({days_left}d)\n   ${amt:,.0f} | {a.get('Awarding Agency','?')}\n   {(a.get('Description') or '')[:100]}\n")
-    lines.append("\u{1F4A1} Watch SAM.gov for pre-solicitation notices 12-18mo before end date.")
+    lines.append("\U0001F4A1 Watch SAM.gov for pre-solicitation notices 12-18mo before end date.")
     return "\n".join(lines)
