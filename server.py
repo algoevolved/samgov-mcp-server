@@ -5,14 +5,13 @@ Runs as a persistent HTTP server. Customers configure it as a remote MCP server
 in their Claude Desktop config:
 
   "samgov": {
-    "url": "https://your-deployed-url.railway.app/sse",
+    "url": "https://samgov-mcp-server-production.up.railway.app/sse",
     "headers": { "x-api-key": "smgov_their_key_here" }
   }
 
 During local dev (DEV_MODE=true), no auth is required.
 """
 
-import asyncio
 import structlog
 import uvicorn
 
@@ -104,8 +103,24 @@ async def health(request: Request) -> JSONResponse:
     return JSONResponse({"status": "ok", "version": settings.SERVER_VERSION,
                         "tools": len(ALL_TOOLS), "dev_mode": settings.DEV_MODE})
 
+async def stripe_webhook(request: Request) -> JSONResponse:
+    """
+    Stripe webhook — provisions/revokes API keys on subscription events.
+    Configure in Stripe Dashboard -> Webhooks -> Add endpoint:
+      URL:    https://samgov-mcp-server-production.up.railway.app/webhook
+      Events: customer.subscription.created
+              customer.subscription.deleted
+              invoice.payment_failed
+    """
+    from middleware.auth import handle_stripe_webhook
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature", "")
+    result = await handle_stripe_webhook(payload, sig_header)
+    return JSONResponse(result, status_code=400 if "error" in result else 200)
+
 app = Starlette(routes=[
     Route("/health", health),
+    Route("/webhook", stripe_webhook, methods=["POST"]),
     Route("/sse", handle_sse),
     Mount("/messages/", app=sse.handle_post_message),
 ])
