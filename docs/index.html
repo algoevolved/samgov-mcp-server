@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAM.gov MCP — Federal Contracting Intelligence for Claude</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0a0e1a; color: #e2e8f0; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; background: rgba(10,14,26,0.95); backdrop-filter: blur(8px); z-index: 100; }
+    .logo { font-size: 1.1rem; font-weight: 700; color: #fff; }
+    .logo span { color: #4f8ef7; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    .hero { text-align: center; padding: 5rem 2rem 3rem; max-width: 800px; margin: 0 auto; }
+    .badge { display: inline-block; background: rgba(79,142,247,0.15); color: #4f8ef7; border: 1px solid rgba(79,142,247,0.3); border-radius: 999px; padding: 0.3rem 1rem; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.25rem; color: #fff; }
+    h1 em { font-style: normal; color: #4f8ef7; }
+    .hero p { font-size: 1.15rem; color: #94a3b8; line-height: 1.7; max-width: 600px; margin: 0 auto 2.5rem; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 0.5rem; background: #4f8ef7; color: #fff; font-weight: 700; padding: 0.9rem 2rem; border-radius: 8px; text-decoration: none; font-size: 1rem; transition: background 0.2s, transform 0.1s; }
+    .hero-cta:hover { background: #3b7de8; transform: translateY(-1px); }
+    .trial-note { margin-top: 0.75rem; font-size: 0.82rem; color: #64748b; }
+    .section { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+    .section-label { text-align: center; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #4f8ef7; margin-bottom: 0.75rem; }
+    .section h2 { text-align: center; font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 700; color: #fff; margin-bottom: 3rem; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .tool-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1.5rem; transition: border-color 0.2s; }
+    .tool-card:hover { border-color: rgba(79,142,247,0.4); }
+    .tool-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .tool-card h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; font-family: monospace; }
+    .tool-card p { font-size: 0.85rem; color: #64748b; line-height: 1.5; }
+    .demo-section { background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .demo-box { background: #0d1117; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; max-width: 700px; margin: 0 auto; }
+    .demo-bar { background: rgba(255,255,255,0.05); padding: 0.6rem 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .demo-dot.r { background: #ff5f57; } .demo-dot.y { background: #ffbd2e; } .demo-dot.g { background: #28c840; }
+    .demo-content { padding: 1.5rem; font-family: monospace; font-size: 0.85rem; line-height: 1.8; }
+    .prompt { color: #94a3b8; } .prompt::before { content: "You  "; color: #4f8ef7; font-weight: bold; }
+    .response { color: #e2e8f0; margin-top: 0.75rem; } .response::before { content: "Claude  "; color: #28c840; font-weight: bold; }
+    .highlight { color: #fbbf24; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; align-items: start; }
+    .pricing-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem; position: relative; transition: transform 0.2s, border-color 0.2s; }
+    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card.featured { border-color: #4f8ef7; background: rgba(79,142,247,0.07); }
+    .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #4f8ef7; color: #fff; font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.9rem; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
+    .tier-name { font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .price { font-size: 3rem; font-weight: 800; color: #fff; line-height: 1; }
+    .price sup { font-size: 1.25rem; vertical-align: super; }
+    .price-period { font-size: 0.85rem; color: #64748b; margin-top: 0.25rem; margin-bottom: 1.5rem; }
+    .features { list-style: none; margin-bottom: 2rem; }
+    .features li { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.9rem; color: #cbd5e1; padding: 0.4rem 0; }
+    .features li::before { content: "✓"; color: #4f8ef7; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .btn { display: block; text-align: center; padding: 0.85rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; }
+    .btn-primary { background: #4f8ef7; color: #fff; }
+    .btn-primary:hover { background: #3b7de8; }
+    .btn-outline { background: transparent; color: #4f8ef7; border: 1.5px solid #4f8ef7; }
+    .btn-outline:hover { background: rgba(79,142,247,0.1); }
+    .trial-tag { text-align: center; font-size: 0.78rem; color: #4f8ef7; margin-top: 0.6rem; }
+    .setup-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .step { text-align: center; padding: 1.5rem; }
+    .step-num { width: 40px; height: 40px; background: rgba(79,142,247,0.15); border: 1px solid rgba(79,142,247,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #4f8ef7; margin: 0 auto 1rem; }
+    .step h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+    .step p { font-size: 0.85rem; color: #64748b; line-height: 1.5; }
+    code { background: rgba(255,255,255,0.08); padding: 0.15rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.85em; color: #93c5fd; }
+    footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 2rem; text-align: center; color: #334155; font-size: 0.82rem; }
+    footer a { color: #475569; text-decoration: none; }
+    footer a:hover { color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">SAM<span>.gov</span> MCP</div>
+  <div class="nav-links">
+    <a href="#tools">Tools</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#setup">Setup</a>
+    <a href="https://github.com/algoevolved/samgov-mcp-server" target="_blank">GitHub</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="badge">MCP Server · 8 Tools · Live Data</div>
+  <h1>Federal contracting intelligence<br/>inside <em>Claude</em></h1>
+  <p>Connect Claude to SAM.gov, USASpending.gov, and SBIR.gov. Search $700B+ in annual federal contracts, find expiring recompetes, and profile your competition — all in plain English.</p>
+  <a href="#pricing" class="hero-cta">Start free 7-day trial →</a>
+  <p class="trial-note">No credit card required during trial · Cancel anytime</p>
+</section>
+
+<section class="section" id="tools">
+  <div class="section-label">What's included</div>
+  <h2>8 tools. Every angle of GovCon BD.</h2>
+  <div class="tools-grid">
+    <div class="tool-card"><div class="tool-icon">🔍</div><h3>search_opportunities</h3><p>Search active solicitations by keyword, agency, NAICS code, or set-aside designation.</p></div>
+    <div class="tool-card"><div class="tool-icon">📄</div><h3>get_opportunity_details</h3><p>Full solicitation package — description, attachments, POC, deadlines, and submission requirements.</p></div>
+    <div class="tool-card"><div class="tool-icon">💰</div><h3>search_awards</h3><p>Historical contract awards with dollar amounts, recipients, agencies, and performance periods.</p></div>
+    <div class="tool-card"><div class="tool-icon">🏢</div><h3>get_vendor_profile</h3><p>SAM.gov entity registration, 8(a)/WOSB/HUBZone certifications, CAGE/UEI lookup.</p></div>
+    <div class="tool-card"><div class="tool-icon">⏰</div><h3>find_expiring_contracts</h3><p>Recompete pipeline — contracts ending in the next N days, sorted by value.</p></div>
+    <div class="tool-card"><div class="tool-icon">📊</div><h3>analyze_agency_spending</h3><p>Agency spend breakdown, top vendors, budget concentration, and white space analysis.</p></div>
+    <div class="tool-card"><div class="tool-icon">🧪</div><h3>search_grants_sbir</h3><p>SBIR/STTR Phase I &amp; II grant solicitations. Up to $1.5M non-dilutive funding.</p></div>
+    <div class="tool-card"><div class="tool-icon">🏆</div><h3>get_competitive_landscape</h3><p>Who's winning in your market — incumbents, win rates, average contract size, concentration.</p></div>
+  </div>
+</section>
+
+<section class="demo-section">
+  <div class="section">
+    <div class="section-label">See it in action</div>
+    <h2>Ask Claude anything about federal contracts</h2>
+    <div class="demo-box">
+      <div class="demo-bar"><div class="demo-dot r"></div><div class="demo-dot y"></div><div class="demo-dot g"></div></div>
+      <div class="demo-content">
+        <div class="prompt">Find DoD cybersecurity contracts expiring in the next 90 days worth over $10M</div>
+        <div class="response">Found <span class="highlight">23 contracts</span> expiring within 90 days:<br/><br/>
+1. <span class="highlight">Leidos</span> — $47.2M | Expires Jun 15<br/>
+&nbsp;&nbsp;DISA Endpoint Security Services | Army<br/><br/>
+2. <span class="highlight">Booz Allen Hamilton</span> — $31.8M | Expires Jul 3<br/>
+&nbsp;&nbsp;Cybersecurity Operations Support | CYBERCOM<br/><br/>
+3. <span class="highlight">SAIC</span> — $28.4M | Expires Jul 22<br/>
+&nbsp;&nbsp;Zero Trust Architecture Implementation | Navy<br/><br/>
+💡 Pre-solicitation notices typically drop 12-18mo before end date...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="section-label">Pricing</div>
+  <h2>Simple, transparent pricing</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="tier-name">Solo</div>
+      <div class="price"><sup>$</sup>79</div>
+      <div class="price-period">per month</div>
+      <ul class="features">
+        <li>All 8 MCP tools</li>
+        <li>500 requests / day</li>
+        <li>SAM.gov + USASpending + SBIR</li>
+        <li>Works with Claude Desktop</li>
+        <li>Email support</li>
+      </ul>
+      <a href="https://buy.stripe.com/test_dRm3cvcbB3M3die1Um3oA00" class="btn btn-outline">Start free trial</a>
+      <p class="trial-tag">7 days free, then $79/mo</p>
+    </div>
+    <div class="pricing-card featured">
+      <div class="popular-badge">Most Popular</div>
+      <div class="tier-name">Team</div>
+      <div class="price"><sup>$</sup>199</div>
+      <div class="price-period">per month</div>
+      <ul class="features">
+        <li>All 8 MCP tools</li>
+        <li>2,000 requests / day</li>
+        <li>SAM.gov + USASpending + SBIR</li>
+        <li>Works with Claude Desktop + API</li>
+        <li>Priority email support</li>
+        <li>Up to 5 team members</li>
+      </ul>
+      <a href="https://buy.stripe.com/test_fZu5kDcbB4Q7ba6gPg3oA01" class="btn btn-primary">Start free trial</a>
+      <p class="trial-tag">7 days free, then $199/mo</p>
+    </div>
+    <div class="pricing-card">
+      <div class="tier-name">Enterprise</div>
+      <div class="price"><sup>$</sup>499</div>
+      <div class="price-period">per month</div>
+      <ul class="features">
+        <li>All 8 MCP tools</li>
+        <li>10,000 requests / day</li>
+        <li>SAM.gov + USASpending + SBIR</li>
+        <li>Works with any MCP client</li>
+        <li>Dedicated support</li>
+        <li>Unlimited team members</li>
+        <li>Custom NAICS / agency filters</li>
+      </ul>
+      <a href="https://buy.stripe.com/test_14A9AT4J9dmD0vs1Um3oA02" class="btn btn-outline">Start free trial</a>
+      <p class="trial-tag">7 days free, then $499/mo</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="setup">
+  <div class="section-label">Quick setup</div>
+  <h2>Live in 3 minutes</h2>
+  <div class="setup-steps">
+    <div class="step"><div class="step-num">1</div><h3>Subscribe</h3><p>Choose a plan above. You'll receive your API key by email within 5 minutes of subscribing.</p></div>
+    <div class="step"><div class="step-num">2</div><h3>Add to Claude Desktop</h3><p>Open <code>claude_desktop_config.json</code> and add the server with your API key.</p></div>
+    <div class="step"><div class="step-num">3</div><h3>Start querying</h3><p>Ask Claude to search SAM.gov, find expiring contracts, or profile your competition.</p></div>
+  </div>
+  <div style="max-width:600px;margin:2.5rem auto 0;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.5rem;">
+    <p style="font-size:0.8rem;color:#64748b;margin-bottom:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">claude_desktop_config.json</p>
+    <pre style="font-family:monospace;font-size:0.85rem;color:#93c5fd;line-height:1.7;overflow-x:auto;">{
+  "mcpServers": {
+    "samgov": {
+      "url": "https://samgov-mcp-server-production.up.railway.app/sse",
+      "headers": {
+        "x-api-key": "YOUR_API_KEY_HERE"
+      }
+    }
+  }
+}</pre>
+  </div>
+</section>
+
+<footer>
+  <p>SAM.gov MCP Server · Built on public federal data · Not affiliated with SAM.gov or the US Government</p>
+  <p style="margin-top:0.5rem;"><a href="https://github.com/algoevolved/samgov-mcp-server">GitHub</a> · <a href="mailto:aiquickhack@gmail.com">Support</a></p>
+</footer>
+
+</body>
+</html>
